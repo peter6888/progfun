@@ -1,0 +1,4 @@
+target
+ex1/project/target/*
+target/*
+*/target/*

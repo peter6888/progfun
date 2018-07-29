@@ -110,5 +110,54 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  test( testName="intersect contains elements in all sets") {
+    new TestSets {
+      val s12 = union(s1, s2)
+      val s23 = union(s2, s3)
+      val s = intersect(s12, s23)
+      assert(!contains(s, 1), "intersect 1")
+      assert(contains(s, 2), "intersect 2")
+      assert(!contains(s, 3),"intersect 3")
+    }
+  }
 
+  test( testName="diff contains elements not in common sets") {
+    new TestSets {
+      val s12 = union(s1, s2)
+      val s23 = union(s2, s3)
+      val s = diff(s12, s23)
+      assert(contains(s, 1), "diff 1")
+      assert(!contains(s, 2), "diff 2")
+      assert(!contains(s, 3),"diff 3")
+    }
+  }
+
+  test( testName = "filter elements by function") {
+    new TestSets {
+      val s23 = union(s2, s3)
+      val s = filter(s23, e=>e>2)
+      assert(!contains(s, 2), "filter 2")
+      assert(contains(s, 3),"filter 3")
+    }
+  }
+
+  test(testName = "set in function rage") {
+    new TestSets {
+      val s123 = union(s1, union(s2, s3))
+      val s23 = union(s2, s3)
+      assert(!forall(s123, _elem => _elem>= 2), "forall 1 should not in")
+      assert(forall(s23, _elem => _elem>=2), "forall 2,3 should in")
+    }
+  }
+
+  test(testName = "tranform set by function") {
+    new TestSets {
+      val s23 = union(s2, s3)
+      val s = map(s23, _elem => {2*_elem})
+      printSet(s23)
+      printSet(s)
+      assert(!contains(s, 2), "2 should not in set anymore")
+      assert(contains(s, 4), " 6 should in set")
+    }
+  }
 }

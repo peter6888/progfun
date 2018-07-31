@@ -2,3 +2,6 @@ submit qq1800@gmail.com MVaSvzj7YyKC8aOZ
 submit qq1800@gmail.com 5Q18UAfYkZoW8qsf
 exit()
 exit
+console
+;reload; set _root_.org.jetbrains.sbt.StructureKeys.sbtStructureOptions in Global := "download resolveClassifiers resolveSbtClassifiers" ;*/*:dumpStructureTo /private/var/folders/9l/35_8wtb5339d1kfpgvz6xs9c0000gn/T/sbt-structure.xml; session clear-all
+all {file:/Users/peli/forgit/progfun/ex1/}root/products {file:/Users/peli/forgit/progfun/ex1/}root/test:products

@@ -1,4 +1,14 @@
+ex2/.idea/*
+ex1/target/*
 target
 ex1/project/target/*
 target/*
 */target/*
+
+ex1/.idea/*
+
+*.xml
+
+ex1/target/streams/test/dependencyClasspath/$global/streams/export
+
+ex1/.idea/.name

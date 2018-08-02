@@ -24,9 +24,15 @@ object Huffman {
   
 
   // Part 1: Basics
-    def weight(tree: CodeTree): Int = ??? // tree match ...
+    def weight(tree: CodeTree): Int = tree match {
+      case Fork(left, right, chars, weight) => weight
+      case Leaf(char, weight) => weight
+    }
   
-    def chars(tree: CodeTree): List[Char] = ??? // tree match ...
+    def chars(tree: CodeTree): List[Char] = tree match {
+      case Fork(left, right, chars, weight) => chars
+      case Leaf(ch, wt) => List(ch)
+    }
   
   def makeCodeTree(left: CodeTree, right: CodeTree) =
     Fork(left, right, chars(left) ::: chars(right), weight(left) + weight(right))
@@ -69,7 +75,33 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-    def times(chars: List[Char]): List[(Char, Int)] = ???
+    def times(chars: List[Char]): List[(Char, Int)] = {
+      def getTimes(_chars: List[Char], _list: List[(Char, Int)]): List[(Char, Int)] = {
+        if(_chars.isEmpty) {
+          _list
+        }
+        else {
+          val _char = _chars.head
+          def updatePair(currentList: List[(Char, Int)]): List[(Char, Int)] = {
+            if (currentList.isEmpty)
+              List((_char, 1))
+            else {
+              val _pair = currentList.head
+              _pair match {
+                case (theChar, theInt) => {
+                  if (theChar == _char)
+                    List((theChar, theInt + 1)) ::: currentList.tail
+                  else
+                    List((theChar, theInt)) ::: updatePair(currentList.tail)
+                }
+              }
+            }
+          }
+          getTimes(_chars.tail, updatePair(_list) )
+        }
+      }
+      getTimes(chars, List())
+    }
   
   /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
@@ -78,12 +110,34 @@ object Huffman {
    * head of the list should have the smallest weight), where the weight
    * of a leaf is the frequency of the character.
    */
-    def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = ???
+    def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = {
+      if(freqs.isEmpty)
+        List()
+      else {
+        val leafChar = freqs.head._1
+        val leafCount = freqs.head._2
+        def insertOrder(leafList: List[Leaf]) : List[Leaf] = {
+          if(leafList.isEmpty)
+            List(new Leaf(leafChar, leafCount))
+          else {
+            val currentOrderedHead = leafList.head
+            val currentOrderedCount = currentOrderedHead.weight
+            if (leafCount <= currentOrderedCount) {
+              List(new Leaf(leafChar, leafCount)) ::: leafList
+            }
+            else {
+              List(leafList.head) ::: insertOrder(leafList.tail)
+            }
+          }
+        }
+        insertOrder(makeOrderedLeafList(freqs.tail))
+      }
+    }
   
   /**
    * Checks whether the list `trees` contains only one single code tree.
    */
-    def singleton(trees: List[CodeTree]): Boolean = ???
+    def singleton(trees: List[CodeTree]): Boolean = (trees.length==1)
   
   /**
    * The parameter `trees` of this function is a list of code trees ordered
@@ -97,7 +151,9 @@ object Huffman {
    * If `trees` is a list of less than two elements, that list should be returned
    * unchanged.
    */
-    def combine(trees: List[CodeTree]): List[CodeTree] = ???
+    def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
+        case t1 :: t2 :: rest => Fork(t1, t2, chars(t1) ::: chars(t2), weight(t1) + weight(t2)) :: rest
+    }
   
   /**
    * This function will be called in the following way:
@@ -116,7 +172,12 @@ object Huffman {
    *    the example invocation. Also define the return type of the `until` function.
    *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
    */
-    def until(xxx: ???, yyy: ???)(zzz: ???): ??? = ???
+    def until(singleTree: List[CodeTree]=>Boolean, doCombine: List[CodeTree]=>List[CodeTree])(treeList: List[CodeTree]): List[CodeTree] = {
+      if(!singleTree(treeList))
+        until(singleTree, doCombine)(doCombine(treeList))
+      else
+        treeList
+    }
   
   /**
    * This function creates a code tree which is optimal to encode the text `chars`.

@@ -51,4 +51,10 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("getTimes") {
+    val chars = List('a','a','b','b','c')
+    val lst = times(chars)
+    assert(lst === List(('a', 2), ('b', 2), ('c', 1)))
+  }
+
 }

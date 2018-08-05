@@ -51,10 +51,21 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("combine one leaf list") {
+    val leafList = List(Leaf('e',1))
+    assert(combine(leafList)===List(Leaf('e',1)))
+  }
+
   test("getTimes") {
     val chars = List('a','a','b','b','c')
     val lst = times(chars)
     assert(lst === List(('a', 2), ('b', 2), ('c', 1)))
   }
 
+  test("CreateCodeTree") {
+    val ct = createCodeTree(List('a','a','b','b','c'))
+    assert(ct === Fork(Fork(Leaf('c',1),Leaf('a',2),List('c', 'a'),3),Leaf('b',2),List('c', 'a', 'b'),5))
+    val decoded = decode(ct, List(0,1,1,0,0))
+    assert(decoded===List('a', 'b', 'c'))
+  }
 }

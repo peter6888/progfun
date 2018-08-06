@@ -15,3 +15,4 @@ ex1/target/streams/test/dependencyClasspath/$global/streams/export
 ex1/.idea/.name
 
 ex4-atmat/.idea/*
+*.iml

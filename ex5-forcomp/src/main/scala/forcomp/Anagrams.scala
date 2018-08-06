@@ -34,10 +34,16 @@ object Anagrams {
    *
    *  Note: you must use `groupBy` to implement this method!
    */
-  def wordOccurrences(w: Word): Occurrences = ???
+  def wordOccurrences(w: Word): Occurrences = w.groupBy(_.toLower).toList.map(
+    _ match {
+      case (a, b)=>(a, b.length)
+    }).sortWith(_._1 < _._1)
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = ???
+  def sentenceOccurrences(s: Sentence): Occurrences = {
+    (for(c_s <- s.foldLeft("")(_+_).groupBy(_.toLower))
+      yield (c_s._1, c_s._2.length)).toList.sortWith(_._1 < _._1)
+  }
 
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
